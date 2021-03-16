@@ -1,12 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { signupUser } from "../../actions/auth";
+import { loginUser } from "../../actions/auth";
 
-class Signup extends React.Component {
+class Login extends React.Component {
   state = {
     email: "",
     password: "",
-    errors: {status: {message: ""}}
+    error: false
   };
 
   handleChange = (event) => {
@@ -19,9 +19,9 @@ class Signup extends React.Component {
     event.preventDefault();
     const { email, password } = this.state;
     this.props
-      .dispatchSignupUser({ email, password })
+      .dispatchLoginUser({ email, password })
       .then(() => this.props.history.push("/"))
-      .catch((errors) => this.setState({ errors }));
+      .catch(() => this.setState({ error: true }));
   };
 
   render() {
@@ -30,10 +30,10 @@ class Signup extends React.Component {
         onSubmit={this.handleSubmit}
         className='w-11/12 max-w-2xl mx-auto mt-8'
       >
-        <h1 className='font-bold text-3xl mb-2'>Sign Up</h1>
-        <p className='h-8 text-red-400'>{this.state.errors.status.message}</p>
+        <h1 className='font-bold text-3xl'>Log In</h1>
+        <p className="h-8 text-red-400">{this.state.error && "Invalid email or password"}</p>
         <fieldset>
-          <label className='block uppercase mb-2' htmlFor='email'>
+          <label className='block uppercase mb-2' for='email'>
             Email:
           </label>
           <input
@@ -46,14 +46,14 @@ class Signup extends React.Component {
           />
         </fieldset>
         <fieldset>
-          <label className='block uppercase mb-2' htmlFor='password'>
+          <label className='block uppercase mb-2' for='password'>
             Password:
           </label>
           <input
             type='password'
             name='password'
             id='password'
-            className='w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4'
+            className="w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4"
             onChange={this.handleChange}
             value={this.state.password}
           />
@@ -61,7 +61,7 @@ class Signup extends React.Component {
         <input
           className='w-full text-center uppercase p-4 bg-blue-300 cursor-pointer mt-4'
           type='submit'
-          value='Sign Up'
+          value='Log In'
         />
       </form>
     );
@@ -70,8 +70,8 @@ class Signup extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchSignupUser: (credentials) => dispatch(signupUser(credentials))
+    dispatchLoginUser: (credentials) => dispatch(loginUser(credentials))
   };
 };
 
-export default connect(null, mapDispatchToProps)(Signup);
+export default connect(null, mapDispatchToProps)(Login);
